@@ -4,6 +4,7 @@ import { Ripgrep } from "../file/ripgrep"
 
 import DESCRIPTION from "./grep.txt"
 import { Instance } from "../project/instance"
+import { withSessionEnv } from "@/util/session-env"
 
 const MAX_LINE_LENGTH = 2000
 
@@ -42,6 +43,7 @@ export const GrepTool = Tool.define("grep", {
     const proc = Bun.spawn([rgPath, ...args], {
       stdout: "pipe",
       stderr: "pipe",
+      env: withSessionEnv(ctx),
     })
 
     const output = await new Response(proc.stdout).text()

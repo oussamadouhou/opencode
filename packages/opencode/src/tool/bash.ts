@@ -15,6 +15,7 @@ import { Flag } from "@/flag/flag.ts"
 import { Shell } from "@/shell/shell"
 
 import { BashArity } from "@/permission/arity"
+import { withSessionEnv } from "@/util/session-env"
 
 const MAX_OUTPUT_LENGTH = Flag.OPENCODE_EXPERIMENTAL_BASH_MAX_OUTPUT_LENGTH || 30_000
 const DEFAULT_TIMEOUT = Flag.OPENCODE_EXPERIMENTAL_BASH_DEFAULT_TIMEOUT_MS || 2 * 60 * 1000
@@ -154,9 +155,7 @@ export const BashTool = Tool.define("bash", async () => {
       const proc = spawn(params.command, {
         shell,
         cwd,
-        env: {
-          ...process.env,
-        },
+        env: withSessionEnv(ctx),
         stdio: ["ignore", "pipe", "pipe"],
         detached: process.platform !== "win32",
       })
